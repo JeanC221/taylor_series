@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Series de Taylor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Series de Taylor</h1>
+        <p>Calcula la expansión en serie de Taylor de cualquier función. ¡Perfecto para estudiantes de ingeniería!</p>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="expression">Función (f(x)):</label>
+                <input type="text" id="expression" name="expression" placeholder="ej. cos(x)" required>
+            </div>
+            <div class="form-group">
+                <label for="a_value">Punto de Expansión (a):</label>
+                <input type="text" id="a_value" name="a_value" placeholder="ej. 0" required>
+            </div>
+            <div class="form-group">
+                <label for="n_value">Orden de Expansión (n):</label>
+                <input type="number" id="n_value" name="n_value" placeholder="ej. 5" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="x_value">Valor de x para calcular errores:</label>
+                <input type="text" id="x_value" name="x_value" placeholder="ej. 1" required>
+            </div>
+            <div class="form-group">
+                <label for="x_min">Intervalo mínimo de x para la gráfica:</label>
+                <input type="text" id="x_min" name="x_min" placeholder="ej. 0" required>
+            </div>
+            <div class="form-group">
+                <label for="x_max">Intervalo máximo de x para la gráfica:</label>
+                <input type="text" id="x_max" name="x_max" placeholder="ej. 5" required>
+            </div>
+            <input type="submit" value="Calcular">
+        </form>
+
+        {% if result %}
+            <div class="result">
+                <h2>Resultado:</h2>
+                <p>Serie de Taylor:</p>
+                <p id="series">{{ result['series_latex'] }}</p>
+                <h3>Valor Teórico:</h3>
+                <p>{{ result['valor_teorico'] }}</p>
+                <h3>Valor Experimental:</h3>
+                <p>{{ result['valor_experimental'] }}</p>
+                <h3>Error Absoluto:</h3>
+                <p>{{ result['error_absoluto'] }}</p>
+                <h3>Error Relativo:</h3>
+                <p>{{ result['error_relativo'] }}%</p>
+            </div>
+
+            <div class="graph">
+                <h2>Gráfica de la Serie de Taylor</h2>
+                <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de la Serie de Taylor">
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "series"]);
+    </script>
+</body>
+</html>
