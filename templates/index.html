@@ -3,66 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Series de Taylor</title>
+    <title>Calculadora de Series de Taylor y Derivación Numérica</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de Series de Taylor</h1>
-        <p>Calcula la expansión en serie de Taylor de cualquier función. ¡Perfecto para estudiantes de ingeniería!</p>
+        <nav>
+            <ul>
+                <li><a href="?section=series_taylor">Series de Taylor</a></li>
+                <li><a href="?section=derivacion_numerica">Derivación Numérica</a></li>
+            </ul>
+        </nav>
+        
+        {% if request.args.get('section') == 'series_taylor' %}
+            <h1>Calculadora de Series de Taylor</h1>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="expression">Función (f(x)):</label>
+                    <input type="text" id="expression" name="expression" placeholder="ej. cos(x)" required>
+                </div>
+                <div class="form-group">
+                    <label for="a_value">Punto de Expansión (a):</label>
+                    <input type="text" id="a_value" name="a_value" placeholder="ej. 0" required>
+                </div>
+                <div class="form-group">
+                    <label for="n_value">Orden de Expansión (n):</label>
+                    <input type="number" id="n_value" name="n_value" placeholder="ej. 5" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="x_value">Valor de x para calcular errores:</label>
+                    <input type="text" id="x_value" name="x_value" placeholder="ej. 1" required>
+                </div>
+                <div class="form-group">
+                    <label for="x_min">Intervalo mínimo de x para la gráfica:</label>
+                    <input type="text" id="x_min" name="x_min" placeholder="ej. 0" required>
+                </div>
+                <div class="form-group">
+                    <label for="x_max">Intervalo máximo de x para la gráfica:</label>
+                    <input type="text" id="x_max" name="x_max" placeholder="ej. 5" required>
+                </div>
+                <input type="submit" value="Calcular">
+            </form>
 
-        <form method="POST">
-            <div class="form-group">
-                <label for="expression">Función (f(x)):</label>
-                <input type="text" id="expression" name="expression" placeholder="ej. cos(x)" required>
-            </div>
-            <div class="form-group">
-                <label for="a_value">Punto de Expansión (a):</label>
-                <input type="text" id="a_value" name="a_value" placeholder="ej. 0" required>
-            </div>
-            <div class="form-group">
-                <label for="n_value">Orden de Expansión (n):</label>
-                <input type="number" id="n_value" name="n_value" placeholder="ej. 5" min="1" required>
-            </div>
-            <div class="form-group">
-                <label for="x_value">Valor de x para calcular errores:</label>
-                <input type="text" id="x_value" name="x_value" placeholder="ej. 1" required>
-            </div>
-            <div class="form-group">
-                <label for="x_min">Intervalo mínimo de x para la gráfica:</label>
-                <input type="text" id="x_min" name="x_min" placeholder="ej. 0" required>
-            </div>
-            <div class="form-group">
-                <label for="x_max">Intervalo máximo de x para la gráfica:</label>
-                <input type="text" id="x_max" name="x_max" placeholder="ej. 5" required>
-            </div>
-            <input type="submit" value="Calcular">
-        </form>
+            {% if result %}
+                <div class="result">
+                    <h2>Resultado:</h2>
+                    <p>Serie de Taylor:</p>
+                    <p id="series">{{ result['series_latex'] }}</p>
+                    <h3>Valor Teórico:</h3>
+                    <p>{{ result['valor_teorico'] }}</p>
+                    <h3>Valor Experimental:</h3>
+                    <p>{{ result['valor_experimental'] }}</p>
+                    <h3>Error Absoluto:</h3>
+                    <p>{{ result['error_absoluto'] }}</p>
+                    <h3>Error Relativo (%):</h3>
+                    <p>{{ result['error_relativo'] }}</p>
+                    {% if plot_url %}
+                        <div class="graph">
+                            <h3>Gráfica:</h3>
+                            <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de Taylor">
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% elif request.args.get('section') == 'derivacion_numerica' %}
+            <h1>Calculadora de Derivación Numérica</h1>
+            <p>Calcula la derivada numérica de una función en un punto dado.</p>
 
-        {% if result %}
-            <div class="result">
-                <h2>Resultado:</h2>
-                <p>Serie de Taylor:</p>
-                <p id="series">{{ result['series_latex'] }}</p>
-                <h3>Valor Teórico:</h3>
-                <p>{{ result['valor_teorico'] }}</p>
-                <h3>Valor Experimental:</h3>
-                <p>{{ result['valor_experimental'] }}</p>
-                <h3>Error Absoluto:</h3>
-                <p>{{ result['error_absoluto'] }}</p>
-                <h3>Error Relativo:</h3>
-                <p>{{ result['error_relativo'] }}%</p>
-            </div>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="f_expr">Función (f(x)):</label>
+                    <input type="text" id="f_expr" name="f_expr" placeholder="ej. sin(x)" required>
+                </div>
+                <div class="form-group">
+                    <label for="xi">Punto en el que se calcula la derivada (x):</label>
+                    <input type="text" id="xi" name="xi" placeholder="ej. 0" required>
+                </div>
+                <div class="form-group">
+                    <label for="h">Valor de h:</label>
+                    <input type="text" id="h" name="h" placeholder="ej. 0.01" required>
+                </div>
+                <input type="submit" value="Calcular">
+            </form>
 
-            <div class="graph">
-                <h2>Gráfica de la Serie de Taylor</h2>
-                <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de la Serie de Taylor">
-            </div>
+            {% if result %}
+                <div class="result">
+                    <h2>Resultado:</h2>
+                    <div class="result-row">
+                        <span class="result-label">Valor Teórico:</span>
+                        <span class="result-value">{{ result['valor_teorico'] }}</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Valor Experimental:</span>
+                        <span class="result-value">{{ result['valor_experimental'] }}</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Error Absoluto:</span>
+                        <span class="result-value">{{ result['error_abs'] }}</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Error Relativo (%):</span>
+                        <span class="result-value">{{ result['error_rel'] }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <h1>Bienvenido a la Calculadora de Series de Taylor y Derivación Numérica</h1>
+            <p>Utiliza el menú de navegación para elegir una de las herramientas.</p>
         {% endif %}
     </div>
-    <script>
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "series"]);
-    </script>
 </body>
 </html>

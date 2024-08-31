@@ -49,34 +49,68 @@ class Taylor:
         plt.close()
         return plot_url
 
+def derivacion_numerica(f, xi, h):
+    return (f(xi + h) - f(xi)) / h
+
+def calculate_error_absoluto(valor_teorico, valor_experimental):
+    return abs(valor_teorico - valor_experimental)
+
+def calculate_error_relativo(valor_teorico, valor_experimental):
+    return abs(valor_teorico - valor_experimental) / abs(valor_teorico)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     result = None
     plot_url = None
-    
-    if request.method == 'POST':
-        expression = request.form['expression']
-        a_value = float(request.form['a_value'])
-        n_value = int(request.form['n_value'])
-        x_value = float(request.form['x_value'])
-        x_min = float(request.form['x_min'])
-        x_max = float(request.form['x_max'])
-        
-        f = sp.sympify(expression)
-        taylor = Taylor(f, a_value, n_value)
-        
-        # Cálculo de Taylor, errores y gráfico
-        model = taylor.taylor()
-        valor_teorico, valor_experimental, error_absoluto, error_relativo = taylor.errores(x_value)
-        plot_url = taylor.grafica([x_min, x_max])
 
-        result = {
-            'series_latex': sp.latex(model),
-            'valor_teorico': valor_teorico,
-            'valor_experimental': valor_experimental,
-            'error_absoluto': error_absoluto,
-            'error_relativo': error_relativo
-        }
+    if request.method == 'POST':
+        if 'expression' in request.form:  # Handle Taylor series calculation
+            expression = request.form['expression']
+            a_value = float(request.form['a_value'])
+            n_value = int(request.form['n_value'])
+            x_value = float(request.form['x_value'])
+            x_min = float(request.form['x_min'])
+            x_max = float(request.form['x_max'])
+
+            f = sp.sympify(expression)
+            taylor = Taylor(f, a_value, n_value)
+
+            # Cálculo de Taylor, errores y gráfico
+            model = taylor.taylor()
+            valor_teorico, valor_experimental, error_absoluto, error_relativo = taylor.errores(x_value)
+            plot_url = taylor.grafica([x_min, x_max])
+
+            result = {
+                'series_latex': sp.latex(model),
+                'valor_teorico': valor_teorico,
+                'valor_experimental': valor_experimental,
+                'error_absoluto': error_absoluto,
+                'error_relativo': error_relativo
+            }
+
+        elif 'f_expr' in request.form:  # Handle numerical differentiation calculation
+            f_expr_input = request.form['f_expr']
+            xi = float(request.form['xi'])
+            h = float(request.form['h'])
+
+            # Procesamiento con SymPy
+            f_expr = sp.sympify(f_expr_input)
+            f = sp.Lambda(x, f_expr)
+            f_prime_theoretical = sp.diff(f_expr, x)
+
+            valor_teorico = f_prime_theoretical.subs(x, xi).evalf()
+            valor_experimental = derivacion_numerica(f, xi, h)
+            error_abs = calculate_error_absoluto(valor_teorico, valor_experimental)
+            error_rel = calculate_error_relativo(valor_teorico, valor_experimental)
+
+            result = {
+                'valor_teorico': valor_teorico,
+                'valor_experimental': valor_experimental,
+                'error_abs': error_abs,
+                'error_rel': error_rel
+            }
+            plot_url = None  # No hay gráfico para derivación numérica
 
     return render_template('index.html', result=result, plot_url=plot_url)
 
