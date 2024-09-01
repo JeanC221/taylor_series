@@ -3,115 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Series de Taylor y Derivación Numérica</title>
+    <title>Calculadora de ingeniería</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        
+        .two-column-layout {
+            display: flex;
+            gap: 50px;
+        }
+        .column {
+            flex: 1;
+        }
+        .form-group input:hover, .form-group input:focus {
+            transform: none;
+            transition: none;
+        }
+        
+    </style>
 </head>
 <body>
     <div class="container">
-        <nav>
-            <ul>
-                <li><a href="?section=series_taylor">Series de Taylor</a></li>
-                <li><a href="?section=derivacion_numerica">Derivación Numérica</a></li>
-            </ul>
-        </nav>
+        {% if section != 'home' %}
+            <a href="{{ url_for('index') }}" class="back-button">← Atrás</a>
+        {% endif %}
+
+        {% if section == 'home' %}
+        <div class="home-container">
+            <h1>Calculadora de ingeniería</h1>
+            <p>Una herramienta poderosa para estudiantes de ingeniería</p>
+            
+            <div class="feature-cards">
+                <div class="card">
+                    <h2>Series de Taylor</h2>
+                    <p>Calcula y visualiza series de Taylor para cualquier función</p>
+                    <a href="{{ url_for('index', section='series_taylor') }}" class="btn">Comenzar</a>
+                </div>
+                <div class="card">
+                    <h2>Derivación Numérica</h2>
+                    <p>Calcula derivadas numéricas con precisión</p>
+                    <a href="{{ url_for('index', section='derivacion_numerica') }}" class="btn">Comenzar</a>
+                </div>
+                <div class="card">
+                    <h2>Búsqueda de Raíces</h2>
+                    <p>Encuentra raíces de funciones usando métodos numéricos</p>
+                    <a href="{{ url_for('index', section='busqueda_raices') }}" class="btn">Comenzar</a>
+                </div>
+            </div>
+            
+            <div class="how-to-use">
+                <h3>Cómo usar</h3>
+                <p>Selecciona una de las opciones arriba para empezar. Ingresa tu función y parámetros, y obtén resultados instantáneos con visualizaciones.</p>
+            </div>
+        </div>
         
-        {% if request.args.get('section') == 'series_taylor' %}
-            <h1>Calculadora de Series de Taylor</h1>
+        {% elif section == 'series_taylor' %}
+        <div class="cardCalc">
+            <h2 class="card-header">Series de Taylor</h2>
             <form method="POST">
-                <div class="form-group">
-                    <label for="expression">Función (f(x)):</label>
-                    <input type="text" id="expression" name="expression" placeholder="ej. cos(x)" required>
-                </div>
-                <div class="form-group">
-                    <label for="a_value">Punto de Expansión (a):</label>
-                    <input type="text" id="a_value" name="a_value" placeholder="ej. 0" required>
-                </div>
-                <div class="form-group">
-                    <label for="n_value">Orden de Expansión (n):</label>
-                    <input type="number" id="n_value" name="n_value" placeholder="ej. 5" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="x_value">Valor de x para calcular errores:</label>
-                    <input type="text" id="x_value" name="x_value" placeholder="ej. 1" required>
-                </div>
-                <div class="form-group">
-                    <label for="x_min">Intervalo mínimo de x para la gráfica:</label>
-                    <input type="text" id="x_min" name="x_min" placeholder="ej. 0" required>
-                </div>
-                <div class="form-group">
-                    <label for="x_max">Intervalo máximo de x para la gráfica:</label>
-                    <input type="text" id="x_max" name="x_max" placeholder="ej. 5" required>
-                </div>
-                <input type="submit" value="Calcular">
-            </form>
-
-            {% if result %}
-                <div class="result">
-                    <h2>Resultado:</h2>
-                    <p>Serie de Taylor:</p>
-                    <p id="series">{{ result['series_latex'] }}</p>
-                    <h3>Valor Teórico:</h3>
-                    <p>{{ result['valor_teorico'] }}</p>
-                    <h3>Valor Experimental:</h3>
-                    <p>{{ result['valor_experimental'] }}</p>
-                    <h3>Error Absoluto:</h3>
-                    <p>{{ result['error_absoluto'] }}</p>
-                    <h3>Error Relativo (%):</h3>
-                    <p>{{ result['error_relativo'] }}</p>
-                    {% if plot_url %}
-                        <div class="graph">
-                            <h3>Gráfica:</h3>
-                            <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de Taylor">
+                <div class="two-column-layout">
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="expression">Función (f(x)): <span class="tooltip" title="Ingrese una función matemática, por ejemplo: sin(x), x^2, exp(x)">ℹ️</span></label>
+                            <input type="text" id="expression" name="expression" placeholder="ej. cos(x)" required list="common-functions">
+                            <datalist id="common-functions">
+                                <option value="sin(x)">
+                                <option value="cos(x)">
+                                <option value="tan(x)">
+                                <option value="exp(x)">
+                                <option value="log(x)">
+                            </datalist>
                         </div>
-                    {% endif %}
+                        <div class="form-group">
+                            <label for="a_value">Punto de Expansión (a): <span class="tooltip" title="El punto alrededor del cual se expande la serie">ℹ️</span></label>
+                            <input type="text" id="a_value" name="a_value" placeholder="ej. 0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="n_value">Orden de Expansión (n): <span class="tooltip" title="Número de términos en la serie de Taylor">ℹ️</span></label>
+                            <input type="number" id="n_value" name="n_value" placeholder="ej. 5" min="1" required>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="x_value">Valor de x para calcular errores: <span class="tooltip" title="Punto para evaluar la precisión de la aproximación">ℹ️</span></label>
+                            <input type="text" id="x_value" name="x_value" placeholder="ej. 1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="x_min">Intervalo mínimo para la gráfica: <span class="tooltip" title="Límite inferior del rango para la gráfica en x">ℹ️</span></label>
+                            <input type="text" id="x_min" name="x_min" placeholder="ej. 0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="x_max">Intervalo máximo para la gráfica: <span class="tooltip" title="Límite superior del rango para la gráfica en x">ℹ️</span></label>
+                            <input type="text" id="x_max" name="x_max" placeholder="ej. 5" required>
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
-        {% elif request.args.get('section') == 'derivacion_numerica' %}
-            <h1>Calculadora de Derivación Numérica</h1>
-            <p>Calcula la derivada numérica de una función en un punto dado.</p>
+                <button type="submit" class="btn-calculate">Calcular</button>
+            </form>
+        </div>
 
+        
+
+        {% elif section == 'derivacion_numerica' %}
+        <div class="cardCalc">
+            <h2 class="card-header">Derivación Numérica</h2>
             <form method="POST">
                 <div class="form-group">
-                    <label for="f_expr">Función (f(x)):</label>
-                    <input type="text" id="f_expr" name="f_expr" placeholder="ej. sin(x)" required>
+                    <label for="f_expr">Función (f(x)): <span class="tooltip" title="Ingrese una función matemática, por ejemplo: sin(x), x^2, exp(x)">ℹ️</span></label>
+                    <input type="text" id="f_expr" name="f_expr" placeholder="ej. sin(x)" required list="common-functions">
                 </div>
                 <div class="form-group">
-                    <label for="xi">Punto en el que se calcula la derivada (x):</label>
+                    <label for="xi">Punto en el que se calcula la derivada (x): <span class="tooltip" title="El punto donde se evalúa la derivada">ℹ️</span></label>
                     <input type="text" id="xi" name="xi" placeholder="ej. 0" required>
                 </div>
                 <div class="form-group">
-                    <label for="h">Valor de h:</label>
+                    <label for="h">Valor de h: <span class="tooltip" title="Paso para la aproximación numérica">ℹ️</span></label>
                     <input type="text" id="h" name="h" placeholder="ej. 0.01" required>
                 </div>
-                <input type="submit" value="Calcular">
+                <button type="submit" class="btn-calculate">Calcular</button>
             </form>
+        </div>
+
+        {% elif section == 'busqueda_raices' %}
+            <div class="cardCalc">
+                <h2 class="card-header">Búsqueda de Raíces</h2>
+                <form method="POST">
+                    <div class="method-selector">
+                        <label for="method">Método:</label>
+                        <select id="method" name="method">
+                            <option value="biseccion">Bisección</option>
+                            <option value="newton">Newton</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="root_function">Función f(x): <span class="tooltip" title="Ingrese una función matemática, por ejemplo: exp(cos(x**3+sqrt(x)))-3*x">ℹ️</span></label>
+                        <input type="text" id="root_function" name="root_function" placeholder="ej. exp(cos(x**3+sqrt(x)))-3*x" required>
+                        <small>Ejemplos válidos: x**2 - 2, sin(x) + cos(x), exp(x) - 3*x</small>
+                        <small>Nota: La multiplicación debe ser explícita. Use 2*x en lugar de 2x.</small>
+                    </div>
+                    <div id="biseccion-inputs" class="two-column-layout">
+                        <div class="column">
+                            <div class="form-group">
+                                <label for="a">Valor inicial a: <span class="tooltip" title="Límite inferior del intervalo">ℹ️</span></label>
+                                <input type="number" id="a" name="a" step="any" placeholder="ej. 3">
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="form-group">
+                                <label for="b">Valor inicial b: <span class="tooltip" title="Límite superior del intervalo">ℹ️</span></label>
+                                <input type="number" id="b" name="b" step="any" placeholder="ej. 3.1">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="newton-inputs" style="display: none;">
+                        <div class="form-group">
+                            <label for="xi">Valor inicial xi: <span class="tooltip" title="Punto inicial para el método de Newton">ℹ️</span></label>
+                            <input type="number" id="xi" name="xi" step="any" placeholder="ej. 0.01">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tolerancia">Tolerancia: <span class="tooltip" title="Precisión deseada para la raíz">ℹ️</span></label>
+                        <input type="number" id="tolerancia" name="tolerancia" step="any" value="1e-10" required>
+                    </div>
+                    <button type="submit" class="btn-calculate">Calcular</button>
+                </form>
+            </div>
+            {% endif %}
+
 
             {% if result %}
-                <div class="result">
-                    <h2>Resultado:</h2>
-                    <div class="result-row">
-                        <span class="result-label">Valor Teórico:</span>
-                        <span class="result-value">{{ result['valor_teorico'] }}</span>
-                    </div>
-                    <div class="result-row">
-                        <span class="result-label">Valor Experimental:</span>
-                        <span class="result-value">{{ result['valor_experimental'] }}</span>
-                    </div>
-                    <div class="result-row">
-                        <span class="result-label">Error Absoluto:</span>
-                        <span class="result-value">{{ result['error_abs'] }}</span>
-                    </div>
-                    <div class="result-row">
-                        <span class="result-label">Error Relativo (%):</span>
-                        <span class="result-value">{{ result['error_rel'] }}</span>
-                    </div>
+            <div class="result-card">
+                <h2>Resultado:</h2>
+                {% if 'error' in result %}
+                    <p class="error-message">{{ result['error'] }}</p>
+                {% else %}
+                    {% if 'series_latex' in result %}
+                        <h3>Serie de Taylor:</h3>
+                        <div class="series-taylor">
+                            \[{{ result['series_latex'] }}\]
+                        </div>
+                    {% endif %}
+                    {% for key, value in result.items() %}
+                        {% if key not in ['error', 'series_latex'] %}
+                            <div class="result-row">
+                                <span class="result-label">{{ key|replace('_', ' ')|title }}:</span>
+                                <span class="result-value">{{ value }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {% if plot_url %}
+                <div class="graph">
+                    <h3>Gráfica:</h3>
+                    <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de resultados">
                 </div>
             {% endif %}
-        {% else %}
-            <h1>Bienvenido a la Calculadora de Series de Taylor y Derivación Numérica</h1>
-            <p>Utiliza el menú de navegación para elegir una de las herramientas.</p>
         {% endif %}
     </div>
+
+    <footer>
+        <div class="footer">
+            <p>Desarrollado por Jean Carlo Herran | © 2024 Todos los derechos reservados</p>
+        <p>Versión 1.0 | <a href="#">Términos de uso</a> | <a href="#">Política de privacidad</a></p>
+        </div> 
+    </footer>
+
+    <script>
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value.trim() === '') {
+                    this.classList.add('invalid');
+                } else {
+                    this.classList.remove('invalid');
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var methodSelector = document.getElementById('method');
+            var biseccionInputs = document.getElementById('biseccion-inputs');
+            var newtonInputs = document.getElementById('newton-inputs');
+
+            methodSelector.addEventListener('change', function() {
+                if (this.value === 'biseccion') {
+                    biseccionInputs.style.display = 'block';
+                    newtonInputs.style.display = 'none';
+                } else {
+                    biseccionInputs.style.display = 'none';
+                    newtonInputs.style.display = 'block';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

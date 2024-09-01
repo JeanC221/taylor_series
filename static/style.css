@@ -1,4 +1,108 @@
 /* style.css */
+
+body {
+    background-color: #f0f0f042;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.2"><text x="10" y="40" font-family="Arial" font-size="20" fill="%23333">∫</text><text x="50" y="70" font-family="Arial" font-size="20" fill="%23333">Σ</text><text x="30" y="20" font-family="Arial" font-size="20" fill="%23333">∂</text><text x="70" y="90" font-family="Arial" font-size="20" fill="%23333">π</text></svg>');
+}
+
+.home-container {
+    text-align: center;
+    padding: 2rem;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 70%;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    margin-top: 60px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Tarjetas menú principal */
+.card {
+    background-color: #edf6f9f4;
+    border-radius: 8px;
+    max-width: 300px;
+    box-shadow:  2px 4px rgba(0, 0, 0, 0.211);
+    padding: 45px;
+    margin-bottom: 30px;
+    margin-top: 25px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.card h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+.card p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+/* Tarjeta dentro de cada calculadora */
+.cardCalc{
+    background-color: #ffffff;
+    border-radius: 10px;
+    max-width: 680px;
+    padding: 50px;
+    margin-bottom: 30px;
+    margin-top: 45px;
+
+    margin: 0 auto;
+}
+
+/* Botón "COMENZAR" menú principal */
+.btn { 
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #007BFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Texto guia página principal */
+.how-to-use {
+    margin-top: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 4px;
+}
+
+/* Botón "Atras" */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+.back-button:hover {
+    background-color: #e0e0e0;
+}
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -7,15 +111,6 @@ body {
     padding: 0;
 }
 
-.container {
-    width: 80%;
-    max-width: 800px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
 h1 {
     text-align: center;
@@ -59,6 +154,7 @@ nav ul li a:hover {
 
 .form-group {
     margin-bottom: 20px;
+    margin-right: 20px;
 }
 
 label {
@@ -160,4 +256,77 @@ input[type="submit"]:hover {
     border-radius: 4px;
     min-width: 200px;
     text-align: right;
+}
+    /* Titulo dentro de cada calculadora*/
+  .card-header {
+    font-size: 45px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 85px;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  /* Botón "Calcular" dentro de las calculadora*/
+  .btn-calculate {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    margin-top: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.btn-calculate:hover {
+    background-color: #0056b3;
+}
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}
+.method-selector {
+    margin-bottom: 20px;
+}
+.series-taylor {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+.result-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.result-card h3 {
+    color: #e40606;
+    border-bottom: 2px solid #a5d6a7;
+    padding-bottom: 10px;
+    margin-top: 0;
 }

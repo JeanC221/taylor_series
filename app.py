@@ -58,14 +58,81 @@ def calculate_error_absoluto(valor_teorico, valor_experimental):
 def calculate_error_relativo(valor_teorico, valor_experimental):
     return abs(valor_teorico - valor_experimental) / abs(valor_teorico)
 
+def parse_function(func_str):
+    try:
+        # Reemplazar ^ por ** para exponentes
+        func_str = func_str.replace('^', '**')
+        # Reemplazar e por exp
+        func_str = func_str.replace('e', 'exp')
+        return sp.sympify(func_str)
+    except sp.SympifyError as e:
+        raise ValueError(f"Error al analizar la función: {str(e)}")
+
+def biseccion(f, a, b, tolerancia):
+    fa = f.subs(x, a)
+    fb = f.subs(x, b)
+    if fa * fb > 0:
+        return None, "No hay raíces en este intervalo"
+    
+    xr = (a + b) / 2
+    fxr = f.subs(x, xr)
+    iteraciones = 0
+    
+    while abs(fxr) > tolerancia and iteraciones < 1000:
+        if fa * fxr > 0:
+            a = xr
+            fa = fxr
+        else:
+            b = xr
+            fb = fxr
+        
+        xr = (a + b) / 2
+        fxr = f.subs(x, xr)
+        iteraciones += 1
+    
+    return xr, iteraciones
+
+def newton(f, xi, tolerancia):
+    try:
+        fxi = f.subs(x, xi)
+        iteraciones = 0
+        while abs(fxi) > tolerancia and iteraciones < 1000:
+            xi = xi - f.subs(x, xi) / f.diff(x).subs(x, xi)
+            fxi = f.subs(x, xi)
+            iteraciones += 1
+        return xi, iteraciones
+    except Exception as e:
+        raise ValueError(f"Error durante el cálculo: {str(e)}")
+
+
+def plot_function(f, xr, method):
+    plt.figure(figsize=(10, 6))
+    x_vals = np.linspace(xr - 2, xr + 2, 1000)
+    y_vals = [f.subs(x, i) for i in x_vals]
+    plt.plot(x_vals, y_vals)
+    plt.plot(xr, 0, 'r*')
+    plt.legend(['f(x)', 'Raíz'])
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.title(f'Método de {method}')
+    plt.grid(True)
+    
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_url = base64.b64encode(img.getvalue()).decode('utf8')
+    plt.close()
+    return plot_url
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    section = request.args.get('section', 'home')
     result = None
     plot_url = None
 
     if request.method == 'POST':
-        if 'expression' in request.form:  # Handle Taylor series calculation
+        if 'expression' in request.form:
             expression = request.form['expression']
             a_value = float(request.form['a_value'])
             n_value = int(request.form['n_value'])
@@ -89,7 +156,7 @@ def index():
                 'error_relativo': error_relativo
             }
 
-        elif 'f_expr' in request.form:  # Handle numerical differentiation calculation
+        elif 'f_expr' in request.form:
             f_expr_input = request.form['f_expr']
             xi = float(request.form['xi'])
             h = float(request.form['h'])
@@ -110,9 +177,30 @@ def index():
                 'error_abs': error_abs,
                 'error_rel': error_rel
             }
-            plot_url = None  # No hay gráfico para derivación numérica
+        elif 'root_function' in request.form:
+            function = sp.sympify(request.form['root_function'])
+            method = request.form['method']
+            
+            if method == 'biseccion':
+                a = float(request.form['a'])
+                b = float(request.form['b'])
+                tolerancia = float(request.form['tolerancia'])
+                root, iteraciones = biseccion(function, a, b, tolerancia)
+            else:  # newton
+                xi = float(request.form['xi'])
+                tolerancia = float(request.form['tolerancia'])
+                root, iteraciones = newton(function, xi, tolerancia)
+            
+            if root is not None:
+                result = {
+                    'root': root,
+                    'iteraciones': iteraciones
+                }
+                plot_url = plot_function(function, root, method.capitalize())
+            else:
+                result = {'error': "No se pudo encontrar una raíz"}
 
-    return render_template('index.html', result=result, plot_url=plot_url)
+    return render_template('index.html', section=section, result=result, plot_url=plot_url)
 
 if __name__ == '__main__':
     app.run(debug=True)
