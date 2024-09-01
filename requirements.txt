@@ -1,4 +1,5 @@
 Flask==3.0.3
-SymPy
-Matplotlib
-NumPy
+SymPy>=1.9
+Matplotlib>=3.3
+NumPy>=1.19
+gunicorn>=20.1.0
