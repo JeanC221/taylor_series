@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ingeniería | Taylor Series</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fa-solid fa-square-root-variable"></i>
+                <span>IngeniCalc</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('index', section='home') }}" class="{{ 'active' if section == 'home' else '' }}">Inicio</a>
+                <a href="{{ url_for('index', section='series_taylor') }}" class="{{ 'active' if section == 'series_taylor' else '' }}">Taylor</a>
+                <a href="{{ url_for('index', section='derivacion_numerica') }}" class="{{ 'active' if section == 'derivacion_numerica' else '' }}">Derivadas</a>
+                <a href="{{ url_for('index', section='busqueda_raices') }}" class="{{ 'active' if section == 'busqueda_raices' else '' }}">Raíces</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 IngeniCalc - Desarrollado por Jean Carlo Herran</p>
+        </footer>
+    </div>
+</body>
+</html>
