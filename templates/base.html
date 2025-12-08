@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Ingeniería | Taylor Series</title>
+    <title>NuCalc | Ingeniería de Precisión</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,8 +24,8 @@
     <div class="app-wrapper">
         <nav class="navbar">
             <div class="nav-brand">
-                <i class="fa-solid fa-square-root-variable"></i>
-                <span>IngeniCalc</span>
+                <i class="fa-solid fa-calculator"></i>
+                <span>NuCalc</span>
             </div>
             <div class="nav-links">
                 <a href="{{ url_for('index', section='home') }}" class="{{ 'active' if section == 'home' else '' }}">Inicio</a>
@@ -40,7 +40,7 @@
         </main>
 
         <footer class="footer">
-            <p>&copy; 2024 IngeniCalc - Desarrollado por Jean Carlo Herran</p>
+            <p>&copy; 2024 IngeniCalc - Desarrollado por Jean Carlo Herran - GitHub: <a href="https://github.com/JeanC221">JeanC221</a></p>
         </footer>
     </div>
 </body>

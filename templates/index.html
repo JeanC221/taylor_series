@@ -4,31 +4,31 @@
 
 {% if error %}
 <div class="error-banner">
-    <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+    <i class="fa-solid fa-triangle-exclamation"></i> <strong>Error de Cálculo:</strong> {{ error }}
 </div>
 {% endif %}
 
 {% if section == 'home' %}
 <div class="hero">
-    <h1>Herramientas de Cálculo Numérico</h1>
-    <p>Visualiza y resuelve problemas complejos con precisión</p>
+    <h1>Herramientas de Precisión</h1>
+    <p>Suite de cálculo numérico para ingeniería y ciencias aplicadas.</p>
 </div>
 
 <div class="features-grid">
     <a href="{{ url_for('index', section='series_taylor') }}" class="feature-card">
-        <i class="fa-solid fa-wave-square feature-icon"></i>
+        <i class="fa-solid fa-code-branch feature-icon"></i>
         <h3>Series de Taylor</h3>
-        <p>Aproximación de funciones mediante series de potencias con visualización gráfica comparativa.</p>
+        <p>Aproximación polinómica de funciones. Análisis de convergencia y visualización de errores.</p>
     </a>
     <a href="{{ url_for('index', section='derivacion_numerica') }}" class="feature-card">
-        <i class="fa-solid fa-arrow-trend-up feature-icon"></i>
+        <i class="fa-solid fa-chart-line feature-icon"></i>
         <h3>Derivación Numérica</h3>
-        <p>Calcula la derivada de una función en un punto utilizando diferencias finitas.</p>
+        <p>Cálculo de pendientes mediante métodos de diferencias finitas de alta precisión.</p>
     </a>
     <a href="{{ url_for('index', section='busqueda_raices') }}" class="feature-card">
-        <i class="fa-solid fa-magnifying-glass feature-icon"></i>
+        <i class="fa-solid fa-location-crosshairs feature-icon"></i>
         <h3>Búsqueda de Raíces</h3>
-        <p>Encuentra ceros de funciones utilizando los métodos de Bisección y Newton-Raphson.</p>
+        <p>Solvers iterativos para ecuaciones no lineales (Bisección y Newton-Raphson).</p>
     </a>
 </div>
 
@@ -36,167 +36,194 @@
 <div class="calc-container">
     <div class="calc-header">
         <h2>Series de Taylor</h2>
-        <p>Aproxima funciones cerca de un punto.</p>
     </div>
 
-    <form method="POST">
-        <div class="two-col">
-            <div>
-                <div class="form-group">
-                    <label class="form-label" for="expression">Función f(x) <i class="fa-solid fa-circle-info tooltip-icon" title="Ej: sin(x), exp(x), x**2"></i></label>
-                    <input type="text" id="expression" name="expression" class="form-input" placeholder="Ej: cos(x)" required list="common-functions">
+    <div class="calc-body">
+        <form method="POST">
+            <div class="two-col">
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="expression"><i class="fa-solid fa-function"></i> Función f(x)</label>
+                        <input type="text" id="expression" name="expression" class="form-input" placeholder="Ej: cos(x)*exp(x)" required list="common-functions">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="a_value">Punto Base (a)</label>
+                        <input type="number" step="any" id="a_value" name="a_value" class="form-input" placeholder="0" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="a_value">Punto de expansión (a)</label>
-                    <input type="number" step="any" id="a_value" name="a_value" class="form-input" placeholder="Ej: 0" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="n_value">Orden (n)</label>
-                    <input type="number" id="n_value" name="n_value" class="form-input" placeholder="Ej: 5" min="1" required>
-                </div>
-            </div>
-            <div>
-                <div class="form-group">
-                    <label class="form-label" for="x_value">Evaluar en x</label>
-                    <input type="number" step="any" id="x_value" name="x_value" class="form-input" placeholder="Ej: 0.5" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Rango Gráfica [min, max]</label>
-                    <div style="display: flex; gap: 1rem;">
-                        <input type="number" step="any" name="x_min" class="form-input" placeholder="Min" required>
-                        <input type="number" step="any" name="x_max" class="form-input" placeholder="Max" required>
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="n_value">Orden de Aproximación (n)</label>
+                        <input type="number" id="n_value" name="n_value" class="form-input" placeholder="5" min="1" max="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="x_value">Punto de Evaluación (x)</label>
+                        <input type="number" step="any" id="x_value" name="x_value" class="form-input" placeholder="0.5" required>
                     </div>
                 </div>
             </div>
-        </div>
-        <button type="submit" class="btn-primary">Calcular y Graficar</button>
-    </form>
+            
+            <div class="form-group">
+                <label class="form-label">Dominio de Gráfica [min, max]</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <input type="number" step="any" name="x_min" class="form-input" placeholder="-2.0" required>
+                    <input type="number" step="any" name="x_max" class="form-input" placeholder="2.0" required>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-primary">Ejecutar Análisis</button>
+        </form>
+    </div>
 </div>
 
 {% elif section == 'derivacion_numerica' %}
 <div class="calc-container">
     <div class="calc-header">
         <h2>Derivación Numérica</h2>
-        <p>Estima la pendiente de la tangente.</p>
     </div>
-    <form method="POST">
-        <div class="form-group">
-            <label class="form-label" for="f_expr">Función f(x)</label>
-            <input type="text" id="f_expr" name="f_expr" class="form-input" placeholder="Ej: x**3" required>
-        </div>
-        <div class="two-col">
+    <div class="calc-body">
+        <form method="POST">
             <div class="form-group">
-                <label class="form-label" for="xi">Punto (x)</label>
-                <input type="number" step="any" id="xi" name="xi" class="form-input" placeholder="Ej: 2" required>
+                <label class="form-label" for="f_expr"><i class="fa-solid fa-function"></i> Función f(x)</label>
+                <input type="text" id="f_expr" name="f_expr" class="form-input" placeholder="Ej: log(x)" required>
             </div>
-            <div class="form-group">
-                <label class="form-label" for="h">Paso (h)</label>
-                <input type="number" step="any" id="h" name="h" class="form-input" placeholder="Ej: 0.01" required>
+            <div class="two-col">
+                <div class="form-group">
+                    <label class="form-label" for="xi">Punto Evaluación (x)</label>
+                    <input type="number" step="any" id="xi" name="xi" class="form-input" placeholder="2.0" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="h">Paso Diferencial (h)</label>
+                    <input type="number" step="any" id="h" name="h" class="form-input" placeholder="0.001" required>
+                </div>
             </div>
-        </div>
-        <button type="submit" class="btn-primary">Calcular Derivada</button>
-    </form>
+            <button type="submit" class="btn-primary">Calcular Derivada</button>
+        </form>
+    </div>
 </div>
 
 {% elif section == 'busqueda_raices' %}
 <div class="calc-container">
     <div class="calc-header">
         <h2>Búsqueda de Raíces</h2>
-        <p>Encuentra donde f(x) = 0.</p>
     </div>
-    <form method="POST" id="roots-form">
-        <div class="form-group">
-            <label class="form-label" for="method">Método</label>
-            <select id="method" name="method" class="form-select">
-                <option value="biseccion">Bisección</option>
-                <option value="newton">Newton-Raphson</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-label" for="root_function">Función f(x)</label>
-            <input type="text" id="root_function" name="root_function" class="form-input" placeholder="Ej: x**2 - 4" required>
-        </div>
-
-        <div id="biseccion-inputs" class="two-col">
+    <div class="calc-body">
+        <form method="POST" id="roots-form">
             <div class="form-group">
-                <label class="form-label" for="a">Intervalo [a]</label>
-                <input type="number" step="any" id="a" name="a" class="form-input" placeholder="Límite inferior">
+                <label class="form-label" for="method">Algoritmo</label>
+                <select id="method" name="method" class="form-select">
+                    <option value="biseccion">Bisección (Intervalo Cerrado)</option>
+                    <option value="newton">Newton-Raphson (Iterativo Abierto)</option>
+                </select>
             </div>
             <div class="form-group">
-                <label class="form-label" for="b">Intervalo [b]</label>
-                <input type="number" step="any" id="b" name="b" class="form-input" placeholder="Límite superior">
+                <label class="form-label" for="root_function"><i class="fa-solid fa-function"></i> Función f(x)</label>
+                <input type="text" id="root_function" name="root_function" class="form-input" placeholder="Ej: x**3 - 2*x - 5" required>
             </div>
-        </div>
 
-        <div id="newton-inputs" class="form-group" style="display: none;">
-            <label class="form-label" for="xi_root">Aproximación Inicial (xi)</label>
-            <input type="number" step="any" id="xi_root" name="xi" class="form-input" placeholder="Ej: 1.5">
-        </div>
+            <!-- Parametros Dinamicos -->
+            <div id="biseccion-inputs" class="two-col" style="background: #f8fafc; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="a">Límite Inferior (a)</label>
+                    <input type="number" step="any" id="a" name="a" class="form-input">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="b">Límite Superior (b)</label>
+                    <input type="number" step="any" id="b" name="b" class="form-input">
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label class="form-label" for="tolerancia">Tolerancia</label>
-            <input type="number" step="any" id="tolerancia" name="tolerancia" class="form-input" value="0.0001" required>
-        </div>
+            <div id="newton-inputs" class="form-group" style="display: none; background: #f8fafc; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                <label class="form-label" for="xi_root">Estimación Inicial (xi)</label>
+                <input type="number" step="any" id="xi_root" name="xi" class="form-input">
+            </div>
 
-        <button type="submit" class="btn-primary">Encontrar Raíz</button>
-    </form>
+            <div class="form-group">
+                <label class="form-label" for="tolerancia">Tolerancia de Convergente</label>
+                <input type="number" step="any" id="tolerancia" name="tolerancia" class="form-input" value="0.0001" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Computar Raíz</button>
+        </form>
+    </div>
 </div>
 {% endif %}
 
 {% if result %}
 <div class="result-section">
-    <div class="result-grid">
+    <div class="result-header">
+        <i class="fa-solid fa-terminal" style="color: var(--text-muted);"></i>
+        <h3>Informe de Resultados</h3>
+    </div>
+
+    <div class="result-grid-table">
         {% if result.root is defined %}
             <div class="result-card main-result">
-                <div class="result-label">Raíz Encontrada</div>
+                <div class="result-label">Raíz Computada</div>
                 <div class="result-value">{{ result.root }}</div>
             </div>
             <div class="result-card">
-                <div class="result-label">Iteraciones</div>
+                <div class="result-label">Iteraciones Totales</div>
                 <div class="result-value">{{ result.iteraciones }}</div>
             </div>
+
         {% elif result.series_latex is defined %}
-            <div class="result-card main-result">
-                <div class="result-label">Polinomio de Taylor</div>
+            <div class="result-card" style="grid-column: 1 / -1;">
+                <div class="result-label">Polinomio Resultante</div>
                 <div class="latex-container">
                     \[ {{ result.series_latex }} \]
                 </div>
             </div>
+            
             <div class="result-card">
-                <div class="result-label">Valor Teórico</div>
-                <div class="result-value">{{ result.valor_teorico }}</div>
+                <div class="result-label">Valor Real (Teórico)</div>
+                <div class="result-value">{{ "%.8f"|format(result.valor_teorico) }}</div>
             </div>
-            <div class="result-card">
-                <div class="result-label">Aproximación</div>
-                <div class="result-value">{{ result.valor_experimental }}</div>
+            <div class="result-card main-result">
+                <div class="result-label">Valor Aproximado</div>
+                <div class="result-value">{{ "%.8f"|format(result.valor_experimental) }}</div>
             </div>
-            <div class="result-card">
+            
+            <div class="result-card error-metric">
                 <div class="result-label">Error Absoluto</div>
-                <div class="result-value">{{ "%.6e"|format(result.error_absoluto) }}</div>
+                <div class="result-value">
+                    {{ "%.4e"|format(result.error_absoluto) }}
+                </div>
             </div>
-            <div class="result-card">
-                <div class="result-label">Error Relativo (%)</div>
-                <div class="result-value">{{ "%.4f"|format(result.error_relativo) }}%</div>
+            <div class="result-card error-metric">
+                <div class="result-label">Error Relativo</div>
+                <div class="result-value">
+                    {{ "%.4f"|format(result.error_relativo) }}%
+                    {% if result.error_relativo < 1 %}
+                        <span class="error-badge good">Excelente</span>
+                    {% elif result.error_relativo < 5 %}
+                        <span class="error-badge warn">Aceptable</span>
+                    {% else %}
+                        <span class="error-badge bad">Alto</span>
+                    {% endif %}
+                </div>
             </div>
+
         {% elif result.valor_experimental is defined %}
              <div class="result-card main-result">
-                <div class="result-label">Derivada Numérica</div>
-                <div class="result-value">{{ result.valor_experimental }}</div>
+                <div class="result-label">Pendiente (Aprox)</div>
+                <div class="result-value">{{ "%.8f"|format(result.valor_experimental) }}</div>
             </div>
             <div class="result-card">
-                <div class="result-label">Derivada Exacta</div>
-                <div class="result-value">{{ result.valor_teorico }}</div>
+                <div class="result-label">Pendiente Exacta</div>
+                <div class="result-value">{{ "%.8f"|format(result.valor_teorico) }}</div>
             </div>
-             <div class="result-card">
+             <div class="result-card error-metric">
                 <div class="result-label">Error Absoluto</div>
-                <div class="result-value">{{ "%.6e"|format(result.error_abs) }}</div>
+                <div class="result-value">{{ "%.4e"|format(result.error_abs) }}</div>
             </div>
         {% endif %}
     </div>
 
     {% if plot_url %}
     <div class="plot-container">
-        <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de la función">
+        <h4 style="margin-bottom: 1rem; color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;">Visualización Gráfica</h4>
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfica de resultados">
     </div>
     {% endif %}
 </div>
@@ -210,6 +237,7 @@
         <option value="exp(x)">
         <option value="log(x)">
         <option value="x**2">
+        <option value="sqrt(x)">
     </datalist>
 
     <script>
