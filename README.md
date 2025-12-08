@@ -1,69 +1,162 @@
-# Proyecto de Calculadora de Ingeniería
-Este proyecto es una aplicación web que ofrece herramientas para cálculos matemáticos avanzados, incluyendo series de Taylor, derivación numérica y búsqueda de raíces, utilizando Python y Flask.
+# 🧮 NuCalc
 
-## Funcionalidades
-- Cálculo y visualización de series de Taylor
-- Derivación numérica
-- Búsqueda de raíces utilizando métodos de bisección y Newton
+> Suite de cálculo numérico de precisión para ingeniería y ciencias aplicadas
 
-## Requisitos
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.0.3-green.svg)](https://flask.palletsprojects.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+##  Características
+
+**NuCalc** es una aplicación web moderna que proporciona herramientas de cálculo numérico con visualización interactiva:
+
+-  **Series de Taylor** - Aproximación polinómica de funciones con análisis de convergencia
+-  **Derivación Numérica** - Cálculo de pendientes mediante diferencias finitas
+-  **Búsqueda de Raíces** - Solvers iterativos (Bisección y Newton-Raphson)
+
+##  Demo
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/JeanC221/taylor_series.git
+cd taylor_series
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar la aplicación
+python app.py
+```
+
+Abrir su navegador en `http://127.0.0.1:5000`
+
+##  Tecnologías
+
+- **Backend**: Flask (Python)
+- **Cálculo Simbólico**: SymPy
+- **Visualización**: Matplotlib
+- **Computación Numérica**: NumPy
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Renderizado Matemático**: MathJax
+
+##  Instalación
+
+### Requisitos Previos
+
 - Python 3.12 o superior
-- Flask 3.0.3
-- SymPy 1.9 o superior
-- Matplotlib 3.3 o superior
-- NumPy 1.19 o superior
+- pip (gestor de paquetes de Python)
 
-## Instalación
-1. **Clonar el repositorio:**
+### Pasos
+
+1. **Clonar el repositorio**
+
    ```bash
-   git clone https://github.com/tu_usuario/calculadora_ingenieria.git
-   cd calculadora_ingenieria
+   git clone https://github.com/JeanC221/taylor_series.git
+   cd taylor_series
    ```
 
-2. **Instalar las dependencias:**
+2. **Crear un entorno virtual (recomendado)**
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # En Windows: .venv\Scripts\activate
+   ```
+
+3. **Instalar las dependencias**
+
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Ejecutar la aplicación:**
+4. **Ejecutar la aplicación**
+
    ```bash
    python app.py
    ```
 
+5. **Acceder a la aplicación**
+
+   Abrir tu navegador en: `http://127.0.0.1:5000`
+
 ## Uso
 
 ### Series de Taylor
-1. Selecciona "Series de Taylor" en la página principal.
-2. Ingresa la función matemática (ej. sin(x), e^x, x^2).
-3. Define el punto de expansión (a).
-4. Establece el orden de la serie (n).
-5. Ingresa el valor de x para calcular errores.
-6. Especifica el intervalo para la gráfica (x mínimo y máximo).
-7. Haz clic en "Calcular" para ver los resultados y la gráfica.
+
+Aproximar funciones mediante polinomios de Taylor:
+
+1. Ingresa la función: `cos(x)`, `exp(x)`, `log(x)`, etc.
+2. Define el punto de expansión `a`
+3. Especifica el orden `n` (número de términos)
+4. Establece el punto de evaluación para análisis de error
+5. Define el dominio de la gráfica
+
+**Ejemplo:**
+
+- Función: `sin(x)`
+- Punto base: `0`
+- Orden: `5`
+- Evaluación: `1.5`
 
 ### Derivación Numérica
-1. Selecciona "Derivación Numérica" en la página principal.
-2. Ingresa la función a derivar.
-3. Especifica el punto (x) donde calcular la derivada.
-4. Define el valor de h (paso para la aproximación numérica).
-5. Haz clic en "Calcular" para obtener el resultado.
+
+Calcular derivadas usando diferencias finitas:
+
+1. Ingresar la función a derivar
+2. Especificar el punto de evaluación `x`
+3. Definir el paso `h` (típicamente `0.001` - `0.0001`)
+
+**Ejemplo:**
+
+- Función: `x**3`
+- Punto: `2`
+- Paso: `0.001`
 
 ### Búsqueda de Raíces
-1. Selecciona "Búsqueda de Raíces" en la página principal.
-2. Elige el método (Bisección o Newton).
-3. Ingresa la función para encontrar sus raíces.
-4. Para el método de bisección, ingresa los valores iniciales a y b.
-5. Para el método de Newton, ingresa el valor inicial xi.
-6. Especifica la tolerancia deseada.
-7. Haz clic en "Calcular" para encontrar la raíz.
 
-## Notas importantes
-- Asegúrate de ingresar las funciones en un formato que el sistema pueda interpretar (ej. usa `**` para potencias, `exp(x)` para e^x).
-- Para multiplicaciones explícitas, usa el símbolo `*` (ej. `2*x` en lugar de `2x`).
-- Las funciones trigonométricas deben escribirse con paréntesis (ej. `sin(x)`, no `sinx`).
+Encuentra ceros de funciones:
 
-## Contribuciones
-Las contribuciones son bienvenidas. Por favor, abre un issue para discutir cambios mayores antes de hacer un pull request.
+**Método de Bisección:**
 
-## Licencia
-[MIT](https://choosealicense.com/licenses/mit/)
+- Requiere intervalo `[a, b]` donde `f(a)` y `f(b)` tienen signos opuestos
+
+**Método de Newton-Raphson:**
+
+- Requiere estimación inicial `xi` cercana a la raíz
+
+##  Verificación
+
+Ejecutar el script de verificación para validar la lógica matemática:
+
+```bash
+python verify_logic.py
+```
+
+##  Contribuciones
+
+Las contribuciones son bienvenidas. Para cambios importantes:
+
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
+
+##  Notas Técnicas
+
+- Las funciones deben usar sintaxis SymPy: `**` para potencias, `*` para multiplicación explícita
+- Funciones disponibles: `sin`, `cos`, `tan`, `exp`, `log`, `sqrt`, etc.
+- Los resultados incluyen métricas de error (absoluto y relativo)
+
+##  Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+##  Autor
+
+**Jean Carlo Herran**
+
+- GitHub: [@JeanC221](https://github.com/JeanC221)
+
+---
+
+⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub
